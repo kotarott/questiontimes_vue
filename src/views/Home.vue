@@ -1,7 +1,6 @@
 <template>
   <div class="home">
     <h1>Homepage!</h1>
-    <a class="btn btn-outline-primary" @click="getQuestions">GET QUESTIONS</a>
       <div v-for="question in questions" :key="question.uuid">
         <div class="card shadow p-1 m-2 bg-body rounded">
           <div class="card-body">
@@ -63,6 +62,7 @@ export default {
     },
   },
   created() {
+    document.title = 'QuestionTimes';
     this.getQuestions();
   },
 };
