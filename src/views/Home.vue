@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    <h1>Homepage!</h1>
       <div v-for="question in questions" :key="question.uuid">
         <div class="card shadow p-1 m-2 bg-body rounded">
           <div class="card-body">

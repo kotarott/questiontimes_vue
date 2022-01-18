@@ -11,6 +11,9 @@
           <a class="nav-link active" aria-current="page" href="#">Home</a>
         </li>
       </ul>
+      <router-link class="btn btn-danger mx-2" :to="{ name: 'question-editor' }">
+        Ask Question
+      </router-link>
       <a class="btn btn-outline-secondary" href="/accounts/logout/">Logout</a>
     </div>
   </div>
