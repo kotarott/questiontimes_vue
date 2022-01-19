@@ -45,15 +45,18 @@
     <div v-else>
       <h1 class="error text-center">404 - Question Not Found</h1>
     </div>
+
     <div v-if="question" class="container">
       <answer-component
         v-for="answer in answers"
         :key="answer.uuid"
         :answer="answer"
         :requestUser="requestUser"
+        @delete-answer="deleteAnswer"
       >
       </answer-component>
     </div>
+
     <div class="my-4">
       <p v-show="loadingAnswers">...loading...</p>
       <button v-show="next" @click="getQuestionAnswers" class="btn btn-sm btn-outline-success m-2">
@@ -103,7 +106,6 @@ export default {
         const response = await axios.get(endpoint);
         this.question = response.data;
         this.userHasAnswered = response.data.user_has_answered;
-        console.log(this.question);
         this.setPageTitle(response.data.content);
       } catch (error) {
         console.log(error.response);
@@ -123,7 +125,6 @@ export default {
       try {
         const response = await axios.get(endpoint);
         this.answers.push(...response.data.results);
-        console.log(this.answers);
         this.loadingAnswers = false;
         if (response.data.next) {
           this.next = response.data.next;
@@ -150,6 +151,16 @@ export default {
         }
       } catch (error) {
         console.log(error);
+      }
+    },
+    async deleteAnswer(answer) {
+      const endpoint = `/api/v1/answers/${answer.uuid}/`;
+      try {
+        await axios.delete(endpoint);
+        this.answers.splice(this.answers.indexOf(answer), 1);
+        this.userHasAnswered = false;
+      } catch (error) {
+        console.log(error.response);
       }
     },
   },
