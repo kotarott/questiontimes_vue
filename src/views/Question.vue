@@ -8,6 +8,12 @@
       </p>
       <p>{{ question.created_at }}</p>
 
+      <question-actions v-if="isQuestionAuthor"
+        :slug="slug"
+      ></question-actions>
+
+      <hr>
+
       <div v-if="userHasAnswered">
         <p class="answer-added">You've written an answer!</p>
       </div>
@@ -43,7 +49,9 @@
       <answer-component
         v-for="answer in answers"
         :key="answer.uuid"
-        :answer="answer">
+        :answer="answer"
+        :requestUser="requestUser"
+      >
       </answer-component>
     </div>
     <div class="my-4">
@@ -58,11 +66,13 @@
 <script>
 import axios from '@/common/api.service';
 import AnswerComponent from '@/components/Answer.vue';
+import QuestionActions from '@/components/QuestionActions.vue';
 
 export default {
   name: 'Question',
   components: {
     AnswerComponent,
+    QuestionActions,
   },
   props: {
     slug: {
@@ -80,9 +90,13 @@ export default {
       showForm: false,
       newAnswerBody: null,
       error: null,
+      requestUser: null,
     };
   },
   methods: {
+    setRequestUser() {
+      this.requestUser = window.localStorage.getItem('username');
+    },
     async getQuestionData() {
       const endpoint = `/api/v1/questions/${this.slug}/`;
       try {
@@ -142,6 +156,12 @@ export default {
   created() {
     this.getQuestionData();
     this.getQuestionAnswers();
+    this.setRequestUser();
+  },
+  computed: {
+    isQuestionAuthor() {
+      return this.question.author === this.requestUser;
+    },
   },
 };
 </script>
