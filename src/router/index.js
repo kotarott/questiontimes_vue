@@ -28,6 +28,12 @@ const routes = [
     component: () => import(/* webpackChunkName: "question" */ '../views/AnswerEditor.vue'),
     props: true,
   },
+  {
+    path: '/:catchAll(.*)',
+    name: 'page-not-found',
+    component: () => import(/* webpackChunkName: "question" */ '../views/NotFound.vue'),
+    props: true,
+  },
 ];
 
 const router = createRouter({
